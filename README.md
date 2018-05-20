@@ -9,9 +9,10 @@ To create an article, just create a plain text file in the *data/articles/* fold
 writing at the beginning of the filename__. The article file can (and will, very probably) contain some html.
 
 You'll then need to add the following lines to the *data/titles* file:
-` @@
-` the article's name
-
+```
+  @@
+  the article's name
+```
 You can upload images and various files in the *data/files* directory, although it is not mandatory and files can be
 uploaded anywhere on your server as long as you link then properly.
 
