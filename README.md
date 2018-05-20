@@ -1,8 +1,8 @@
 # simple_blog
 A very simple blog system.
 
-You'll need to delete the *data/articles/placeholder* and *data/titles* files after copying the files on your server.
-Please see the _Customization_ section below for more details on things you could bother modifying.
+You'll need to delete the *data/articles/000000-temporary-placeholder* and *data/titles* files after copying the files
+on your server. Please see the _Customization_ section below for more details on things you could bother modifying.
 
 # Writing an article
 To create an article, just create a plain text file in the *data/articles/* folder __with the date and time of the
@@ -27,5 +27,5 @@ Almost every other file is just here for automation.
 
 # How does the whole thing work?
 *index.php* lists the files in the *data/articles* directory and name each link with the names in the *data/titles*
-file. *article.php* _GET_s an _id_ and display the corresponding file's contents. For more information, please read
+file. *article.php* *GETs* an _id_ and display the corresponding file's contents. For more information, please read
 [this blog post](http://martin.thepig.chez.com/log/article.php?id=2).
