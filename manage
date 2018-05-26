@@ -1,0 +1,86 @@
+#!/bin/bash
+
+printHelp () { \
+  echo "Usage:"
+  echo "- new : write a new article"
+  echo "- rm : delete an article"
+  echo "- edit : edit an article"
+}
+
+getTitle () { \
+  echo -n "Enter the new article's name: "
+  read title
+  echo -n "Add a prefix (language, etc): "
+  read prefix
+  prefix="[$prefix-$(date +%Y/%m/%d)]"
+}
+
+delete () { \
+  read n
+  let i=1
+  for t in `ls data/articles`
+  do
+    [ "$i" == "$n" ] && rm data/articles/$t && break
+    let i=$i+1
+  done
+
+  articletitle=$t
+
+  let i=1
+  for t in `cat data/titles`
+  do
+    ([ "$t" == "@@" ] || [ "$i" == "$n" ]) || echo -n "$t " >> data/titlestemp
+    [ "$t" == "@@" ] && let i=$i+1 && \
+      ([ "$i" == "$n" ] || echo -e "\n@@" >> data/titlestemp)
+  done 
+  rm data/titles
+  mv data/titlestemp data/titles
+
+  echo "Succesfully deleted $articletitle"
+}
+
+write_new () { \
+  echo -e "\n@@\n$prefix $title" >> data/titles
+  $EDITOR data/articles/$filename
+  echo "Succesfully created file \"$filename\" for article \"$title\""
+}
+
+listFiles () { \
+  echo "Choose an article: "
+  let i=1
+  echo -n "$i: "
+  for t in `cat data/titles`
+  do
+    [ "$t" == "@@" ] || echo -n "$t "
+    [ "$t" == "@@" ] && echo "" && let i=$i+1 && echo -n "$i: "
+  done 
+  echo ""
+}
+
+make_name () { \
+  filename=`date +%Y%m%d-%H%M`
+  for word in $title
+  do
+    filename="$filename-$word"
+  done
+}
+
+edit () { \
+  listFiles
+  read n
+  let i=1
+  for t in `ls data/articles`
+  do
+    [ "$i" == "$n" ] && $EDITOR data/articles/$t && break
+    let i=$i+1
+  done
+  echo "Succesfully edited $t."
+  echo "Note: title modification is a work in progress. Please edit it directly in data/titles."
+}
+
+case "$1" in
+  new) getTitle && make_name && write_new ;;
+  rm) listFiles && delete ;;
+  edit) edit;;
+  *) printHelp ;;
+esac
