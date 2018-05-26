@@ -12,7 +12,8 @@ getTitle () { \
   read title
   echo -n "Add a prefix (language, etc): "
   read prefix
-  prefix="[$prefix-$(date +%Y/%m/%d)]"
+  [ "$prefix" == "" ] || prefix="[$prefix-$(date +%Y/%m/%d)]"
+  [ "$prefix" == "" ] && prefix="[$(date +%Y/%m/%d)]"
 }
 
 delete () { \
