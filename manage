@@ -9,23 +9,23 @@ printHelp () { \
 
 getTitle () { \
   echo -n "Enter the new article's name: "
-  read title
+  read -r title
   echo -n "Add a prefix (language, etc): "
-  read prefix
+  read -r prefix
   [ "$prefix" == "" ] || prefix="[$prefix-$(date +%Y/%m/%d)]"
   [ "$prefix" == "" ] && prefix="[$(date +%Y/%m/%d)]"
+  echo ""
 }
 
 delete () { \
-  read n
+  read -r n
   let i=1
   for t in `ls data/articles`
   do
+    articletitle=$t
     [ "$i" == "$n" ] && rm data/articles/$t && break
     let i=$i+1
   done
-
-  articletitle=$t
 
   let i=1
   for t in `cat data/titles`
@@ -42,6 +42,7 @@ delete () { \
 
 write_new () { \
   echo -e "\n@@\n$prefix $title" >> data/titles
+  touch data/articles/$filename
   $EDITOR data/articles/$filename
   echo "Succesfully created file \"$filename\" for article \"$title\""
 }
@@ -60,15 +61,26 @@ listFiles () { \
 
 make_name () { \
   filename=`date +%Y%m%d-%H%M`
-  for word in $title
-  do
-    filename="$filename-$word"
-  done
+  echo "Do you want to name the article text file yourself?"
+  read -p "This won't show anywhere on the website nor the URLS. " -n 1 -r
+  echo    # (optional) move to a new line
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+    for word in `echo $title | tr -dc '[:alnum:] '`
+    do
+      filename="$filename-$word"
+    done
+  else  
+    echo -ne "Please enter a short filename: "
+    read -r words
+    words=$(echo $words | tr -dc '[:alnum:] ' | tr ' ' '-')
+    filename="$filename-$words"
+  fi
 }
 
 edit () { \
   listFiles
-  read n
+  read -r n
   let i=1
   for t in `ls data/articles`
   do
