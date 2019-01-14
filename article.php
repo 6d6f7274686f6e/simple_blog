@@ -1,5 +1,6 @@
 <?php
 
+$npaths = 0;
 if(file_exists("articlelist.php"))
 {
   include("articlelist.php");
@@ -7,11 +8,13 @@ if(file_exists("articlelist.php"))
 
 $article_title = "Article not found";
 $article_contents = "<p>There is no article with this id!</p>";
+$i = -1;
 
 if(isset($_GET['id']))
 {
   $i = $_GET['id'];
-  if($i + 2 < count($paths))
+  $npaths = count($paths);
+  if($i + 2 < $npaths)
   {
     $article_title = $names[$i];
     $article_path  = $paths[$i + 2];
@@ -31,13 +34,31 @@ $pagetitle = preg_replace('/\[.+\]/', '', $article_title);
 </head>
  <body>
   <header>
-   <h1>Simple Blog</h1>
+   <h1><a href="index.php">Simple Blog</a></h1>
   </header>
     <h2><?php echo $article_title ?></h2>
     <div>
       <?php echo $article_contents ?>
-
-      <p><a class = "soc" href="index.php">Go back...</a></p>
+      <p>
+        <hr />
+        <a class = "soc" href="index.php">Go back...</a>
+        <div class = "controlid">
+        <?php
+          if($i > 0)
+          {
+          ?>
+            <a class = "soc" href="article.php?id=<?php echo ($i - 1); ?>">Previous</a>
+          <?php
+          }
+          if($i + 3 < $npaths)
+          {
+          ?>
+            <a class = "soc" href="article.php?id=<?php echo ($i + 1); ?>">Next</a>
+          <?php
+          }
+          ?>
+        </div>
+      </p>
     </div>
     <?php 
       include("footer.php");
