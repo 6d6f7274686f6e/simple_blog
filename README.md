@@ -26,6 +26,6 @@ You can (and should) customize the following files:
 Almost every other file is just here for automation.
 
 # How does the whole thing work?
-`index.php` lists the files in the `data/articles` directory and name each link with the names in the `data/titles`
-file. `article.php` *GETs* an _id_ and display the corresponding file's contents. For more information, please read
-[this blog post](http://blog.morthon.rf.gd/article.php?id=2).
+`index.php` lists the files in the `data/articles` directory in alphabetical order and associate each file with the
+corresponding name in the `data/titles` file. `article.php` *GETs* an _id_ and display the corresponding file's
+contents. 
